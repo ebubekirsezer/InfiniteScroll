@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:InfiniteScroll"
+             xmlns:extended="clr-namespace:Xamarin.Forms.Extended;assembly=Xamarin.Forms.Extended.InfiniteScrolling"
+             x:Class="InfiniteScroll.MyView">
+    <ContentPage.BindingContext>
+        <local:MainViewModel/>
+    </ContentPage.BindingContext>
+    <StackLayout>
+        <Label Text="PLAYERS"
+               TextColor="Black"
+               FontSize="Large"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"/>
+        <ListView ItemsSource="{Binding Players}"
+                  CachingStrategy="RecycleElement"
+                  HasUnevenRows="True">
+            <ListView.Behaviors>
+                <extended:InfiniteScrollBehavior IsLoadingMore="{Binding IsBusy}"/>
+            </ListView.Behaviors>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid Padding="10,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.4*"/>
+                                <ColumnDefinition Width="0.6*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding Image}"
+                                   Grid.Column="0"
+                               VerticalOptions="Center"
+                               HorizontalOptions="StartAndExpand"
+                                   WidthRequest="100"
+                                   HeightRequest="100"
+                               Aspect="AspectFit"/>
+                            <Grid Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Start">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.7*"/>
+                                    <RowDefinition Height="0.3*"/>
+                                </Grid.RowDefinitions>
+                                <Label Text="{Binding Name}"
+                                   Grid.Row="0"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Start"
+                               FontSize="Medium"
+                               TextColor="Black"/>
+                                <Label Text="{Binding Club}"
+                                       Grid.Row="1"
+                                       FontSize="Small"
+                                       TextColor="Black"
+                                       VerticalOptions="Start"
+                                       HorizontalOptions="Start"/>
+                            </Grid>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Footer>
+                <Grid IsVisible="{Binding IsBusy}">
+                    <Grid.Triggers>
+                        <Trigger TargetType="Grid"
+                                 Property="IsVisible"
+                                 Value="False">
+                            <Setter Property="HeightRequest"
+                                    Value="0"/>
+                        </Trigger>
+                    </Grid.Triggers>
+                    <Label Text="Loading..."
+                           TextColor="Green"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"
+                           FontSize="Medium"/>
+                </Grid>
+            </ListView.Footer>
+        </ListView>
+    </StackLayout>
+</ContentPage>
